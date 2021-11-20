@@ -11,15 +11,31 @@ jest.mock('../startLoop', () => ({
 beforeEach(() => {
     document.body.innerHTML = ''
 })
-describe('testing initLoop', () => {         
-    // @ts-ignore
-    it('initLoop con elemento', () => {
+describe('testing initLoop verificandone i side effects', () => {         
+    
+    it('initLoop con elemento già presente nel dom', () => {
+        
+        const cnvs = document.createElement('canvas')
+        document.body.appendChild(cnvs)
+
+        initLoop(cnvs)
+        
+        expect(canvas).not.toBe(undefined)
+        expect(ctx).not.toBe(undefined)
+        expect(startLoop).toBeCalled(); 
+
+        expect(canvas.parentNode).toBe(document.body)
+        
+    })
+    it('initLoop con elemento creato al volo', () => {
         
         initLoop(document.createElement('canvas'))
         
         expect(canvas).not.toBe(undefined)
         expect(ctx).not.toBe(undefined)
         expect(startLoop).toBeCalled(); 
+
+        expect(canvas.parentNode).toBe(document.body)
         
     })
     it('initLoop senza elemento', () => {
@@ -29,7 +45,7 @@ describe('testing initLoop', () => {
         expect(canvas).not.toBe(undefined)
         expect(ctx).not.toBe(undefined)
         expect(startLoop).toBeCalled(); 
-        
+        expect(canvas.parentNode).toBe(document.body)
     })
     
 })
